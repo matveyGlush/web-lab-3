@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+    <title>MAIN PAGE TITLE</title>
+</h:head>
+<h:body>
+    <ui:composition template="/template/common/commonLayout.xhtml">
+
+        <ui:define name="content">
+            <div class="content-wrapper">
+                <div class="axis" id="axis" style="background-image: url(lab-3-axis.png); width: 300px; height: 300px; background-size: 300px 300px;">
+                    <div id="area" class="area" style="width: 300px; height: 300px; overflow: hidden; background-image: url(lab-3-1.png); background-size: 50px 50px; background-position: center; background-repeat: no-repeat;">
+                        <div class="area-image-wrapper" style="height: 0px; width: 0px; display: flex">
+                            <img id="area-image" src="lab-3-1.png" alt="never gonna give you up never gonna let you down"/>
+                        </div>
+                        <div class="point-field" id="point-field"></div>
+                    </div>
+                </div>
+                <div class="controls">
+                    <div>
+                        <h:form id="main-form">
+                            <h:outputLabel for="x-input" style="margin-right: 2px;">
+                                <h:outputText value="Enter x" style="margin-right: 2px;"/>
+                            </h:outputLabel>
+                            <h:commandButton type="button" value="-5" onclick="reactToXChanged(this.value)"/>
+                            <h:commandButton type="button" value="-4" onclick="reactToXChanged(this.value)"/>
+                            <h:commandButton type="button" value="-3" onclick="reactToXChanged(this.value)"/>
+                            <h:commandButton type="button" value="-2" onclick="reactToXChanged(this.value)"/>
+                            <h:commandButton type="button" value="-1" onclick="reactToXChanged(this.value)"/>
+                            <h:commandButton type="button" value="0" onclick="reactToXChanged(this.value)"/>
+                            <h:commandButton type="button" value="1" onclick="reactToXChanged(this.value)"/>
+                            <h:commandButton type="button" value="2" onclick="reactToXChanged(this.value)"/>
+                            <h:commandButton type="button" value="3" onclick="reactToXChanged(this.value)"/>
+                            &nbsp;&nbsp;
+                            <h:inputText required="true" id="x-input" value="#{resultDisplay.x}"
+                                         validatorMessage="X value: digits from -5 to 3 plz"
+                                         converterMessage="X value: Please enter digits only." style="width: 20px;" >
+                                <f:validateDoubleRange minimum="-5" maximum="3"/>
+                            </h:inputText>
+                            <br/>
+                            <h:outputLabel for="y-input" style="margin-right: 2px;">
+                                <h:outputText value="Enter y" style="margin-right: 2px;"/>
+                            </h:outputLabel>
+                            <h:inputText required="true" id="y-input" value="#{resultDisplay.y}"
+                                         validatorMessage="Y value: digits from -3 to 5 plz"
+                                         converterMessage="Y value: Please enter digits only" style="margin-right: 2px;">
+                                <f:validateDoubleRange minimum="-3" maximum="5"/>
+                            </h:inputText>
+                            <h:commandButton id="main-submit" value="Test" action="#{resultDisplay.performAreaCheck}" />
+                            <br/>
+                            <!--><h:message for="x-input" /><-->
+                            <br/>
+                            <h:message for="y-input" />
+
+                        </h:form>
+                    </div>
+                    <div>
+                        <h:form id="r-form">R:&nbsp;
+                            <h:selectOneRadio id="r-input" value = "#{resultDisplay.r}" onchange="reactToChangeRRadio(this.value)">
+                                <f:selectItem itemValue = "1" itemLabel = "1" />
+                                <f:selectItem itemValue = "2" itemLabel = "2" />
+                                <f:selectItem itemValue = "3" itemLabel = "3" />
+                                <f:selectItem itemValue = "4" itemLabel = "4" />
+                                <f:selectItem itemValue = "5" itemLabel = "5" />
+                            </h:selectOneRadio>
+                            <h:commandButton id="r-submit" value="Change R" style="height: 0px; width: 0px;"/>
+                        </h:form>
+                    </div>
+                    <div>
+                        <h:form>
+                            <h:inputText required="true" id="n-input" value="#{resultDisplay.checksDisplayed}" validatorMessage="digits from 0 to 1000 plz" converterMessage="Please enter digits only">
+                                <f:validateLongRange minimum="0" maximum="1000"/>
+                            </h:inputText>
+                            <h:message for="n-input" />
+                            <h:commandButton value="Show me this many checks"/>
+                        </h:form>
+                    </div>
+
+                </div>
+                <br/>
+                <div class="history" id="history"></div>
+            </div>
+
+            <h:outputScript>
+
+                const POINT_RADIUS_IN_PX = 5;
+
+                const AREA = {
+                "inReal": {
+                "width": 12,
+                "height": 12,
+                "topY": 6,
+                "leftX": -6,
+                "r": #{resultDisplay.r}
+                },
+                "inPx": {
+                "width": 300,
+                "height": 300
+                }
+                }
+
+                const CHECK_HISTORY = #{resultDisplay.checkHistoryAsJSON()};
+                const CHECKS_RECALCULATED_FOR_CURRENT_R = #{resultDisplay.checksRecalculatedForCurrentRAsJSON()};
+
+
+                function history(checks) {
+                    const hist = document.createElement('div');
+                    checks.forEach(check => hist.append(historyUnit(check)));
+                    return hist;
+                }
+
+                function historyUnit(check) {
+                    const x = document.createElement('div');
+                    x.classList.add('x');
+                    x.innerHTML = "x: " + check.x;
+
+                    const y = document.createElement('div');
+                    y.classList.add('y');
+                    y.innerHTML = "y: " + check.y;
+
+                    const r = document.createElement('div');
+                    r.classList.add('r');
+                    r.innerHTML = "r: " + check.r;
+
+                    const result = document.createElement('div');
+                    result.classList.add('result');
+                    result.innerHTML = "result: ";
+                    if (check.areaContainsPoint === "true")
+                        result.innerHTML += "contains";
+                    else
+                        result.innerHTML += "doesn't contain";
+
+                    const requestDate = document.createElement('div');
+                    requestDate.classList.add('request-date');
+                    requestDate.innerHTML = "request date: " + check.requestDate;
+
+                    const calculationTime = document.createElement('div');
+                    calculationTime.classList.add('calculation-time');
+                    calculationTime.innerHTML = "calculation time: " + check.calculationTime;
+
+                    const ret = document.createElement('div');
+                    [x, y, r, result, requestDate, calculationTime].forEach(el => ret.append(el));
+                    return ret;
+                }
+
+                function pointField(checks, pointsRendered = 0, field = document.createElement('div')) {
+                    if (pointsRendered === checks.length)
+                        return field;
+                    const currentCheck = checks[pointsRendered];
+                    field.append(point(currentCheck, pointsRendered));
+                    return pointField(checks, pointsRendered + 1, field);
+                }
+
+                function point(check, pointsRendered) {
+                    const left = (check.x - AREA.inReal.leftX) * (AREA.inPx.width / AREA.inReal.width) - POINT_RADIUS_IN_PX;
+                    const top = (AREA.inReal.topY - check.y) * (AREA.inPx.height / AREA.inReal.height)
+                        - pointsRendered * 2 * POINT_RADIUS_IN_PX - POINT_RADIUS_IN_PX;
+                    const p = document.createElement('div');
+                    p.classList.add('point');
+                    p.style = pointStyle(top, left, check.areaContainsPoint === "true");
+                    p.title = pointTitle(check);
+                    return p;
+                }
+
+                function pointStyle(top, left, contains) {
+                    return "position: relative;" +
+                        " top: " + top + "px;" +
+                        " left: " + left + "px;" +
+                        " width: " + 2 * POINT_RADIUS_IN_PX + "px;" +
+                        " height: " + 2 * POINT_RADIUS_IN_PX + "px;" +
+                        " border-radius: " + POINT_RADIUS_IN_PX + "px;" +
+                        "background-color: " + (contains? "green" : "red") + ";";
+                }
+
+                function pointTitle(check) {
+                    return "Point: (" + check.x + ", " + check.y
+                        + ", contains?: " + check.areaContainsPoint
+                        + ", last recalculation(for current radius): " + check.RequestDate;
+                }
+
+                function areaWidthInPx() {
+                    return (2 * AREA.inReal.r / AREA.inReal.width) * AREA.inPx.width;
+                }
+
+                function areaHeightInPx() {
+                    return (2 * AREA.inReal.r / AREA.inReal.height) * AREA.inPx.height;
+                }
+
+                function calculateXY(xClickCoordinate, yClickCoordinate, areaTopLeftCornerXCoordinate, areaTopLeftCornerYCoordinate, areaWidthInPx, areaHeightInPx) {
+                    let centerCoordinateY = areaTopLeftCornerYCoordinate - (areaHeightInPx / 2);
+                    let centerCoordinateX = areaTopLeftCornerXCoordinate + (areaWidthInPx / 2);
+                    let centerAndClickWidthDifferencePx = xClickCoordinate - centerCoordinateX;
+                    let centerAndClickHeightDifferencePx = yClickCoordinate - centerCoordinateY;
+                    let yOut = (centerAndClickHeightDifferencePx / areaHeightInPx) * AREA.inReal.height;
+                    let xOut = (centerAndClickWidthDifferencePx / areaWidthInPx) * AREA.inReal.width;
+                    return {
+                        x: +(xOut).toPrecision(2),
+                        y: +(yOut).toPrecision(2)
+                    }
+                }
+
+                function getXYInputFromAreaClickAndSubmitForm(xClick, yClick) {
+                    let area = document.getElementById("axis");
+                    let xClickCoordinate = xClick;
+                    let yClickCoordinate = yClick;
+                    let areaTopLeftCornerXCoordinate = getOffset(area).left;
+                    let areaTopLeftCornerYCoordinate = -1 * getOffset(area).top;
+                    let areaWidthInPx = area.offsetWidth;
+                    let areaHeightInPx = area.offsetHeight;
+                    let x = calculateXY(xClickCoordinate, yClickCoordinate, areaTopLeftCornerXCoordinate, areaTopLeftCornerYCoordinate, areaWidthInPx, areaHeightInPx).x;
+                    let y = calculateXY(xClickCoordinate, yClickCoordinate, areaTopLeftCornerXCoordinate, areaTopLeftCornerYCoordinate, areaWidthInPx, areaHeightInPx).y;
+
+                    document.getElementById("main-form:x-input").value = x;
+                    document.getElementById("main-form:y-input").value = y;
+                    let sub = document.getElementById('main-form:main-submit');
+                    sub.click();
+                }
+
+                function areaClicked(e) {
+                    let xClick = e.clientX;
+                    let yClick = -1 * e.clientY;
+                    getXYInputFromAreaClickAndSubmitForm(xClick, yClick);
+                }
+
+                function getOffset(el) {
+                    const rect = el.getBoundingClientRect();
+                    return {
+                    left: rect.left + window.scrollX,
+                    top: rect.top + window.scrollY
+                    };
+                }
+
+                function reactToChangeRRadio(newR) {
+                    document.getElementById("r-form:r-input").value = newR;
+                    document.getElementById('r-form:r-submit').click();
+                }
+                function reactToXChanged(newX) {
+                    document.getElementById("main-form:x-input").value = newX;
+                }
+
+
+                document.getElementById('axis').addEventListener('click', areaClicked);
+                document.getElementById('area').style.backgroundSize = areaWidthInPx() + "px " + areaHeightInPx() + "px"; //TODO: don't get it twisted
+                document.getElementById('history').innerHTML = history(CHECK_HISTORY).innerHTML;
+                document.getElementById('point-field').innerHTML = pointField(CHECKS_RECALCULATED_FOR_CURRENT_R).innerHTML;
+            </h:outputScript>
+        </ui:define>
+
+    </ui:composition>
+
+</h:body>
+
+
+</html>

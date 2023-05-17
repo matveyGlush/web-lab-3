@@ -1,0 +1,108 @@
+<?xml version="1.0"?>
+<project default="build" basedir=".">
+    <property file="build.properties"/>
+    <path id="lib.main.path">
+        <fileset dir="${lib.main.dir}" includes="**/*.jar"/>
+    </path>
+
+    <path id="lib.test.path">
+        <path refid="lib.main.path"/>
+        <fileset dir="${lib.test.dir}" includes="**/*.jar"/>
+    </path>
+
+    <!-- COMPILE -->
+    <target name="compile" depends="clean" description="Compiles the application">
+        <mkdir dir="${build.classes}"/>
+
+        <javac srcdir="${src.dir}"
+               destdir="${build.classes}"
+               debug="false"
+               deprecation="true"
+               optimize="true" >
+            <classpath refid="lib.main.path"/>
+        </javac>
+
+        <copy todir="${build.classes}">
+            <fileset dir="${src.dir}" includes="**/*.*" excludes="**/*.java"/>
+        </copy>
+
+        <mkdir dir="${test.dir}"/>
+        <javac srcdir="${src.test.dir}"
+               destdir="${test.dir}"
+               includeantruntime="false">
+            <classpath refid="lib.test.path"/>
+        </javac>
+
+        <copy todir="${build.classes}">
+            <fileset dir="${src.test.dir}" includes="**/*.*" excludes="**/*.java"/>
+        </copy>
+    </target>
+
+
+    <!-- BUILD -->
+    <target name="build" depends="clean, compile" description="Builds the application">
+        <jar jarfile="${jarfile}">
+            <fileset dir="${build.classes}"/>
+        </jar>
+    </target>
+
+    <!-- COPYING TO HELIOS -->
+    <target name="scp" depends="build" description="Copies the jar to helios">
+        <input message="Enter password: " addproperty="scp.password">
+            <handler type="secure"/>
+        </input>
+        <scp file="${jarfile}" port="${scp.port}" password="${scp.password}" trust="true"
+             todir="${scp.dir}"/>
+    </target>
+
+    <!-- RUNNING TESTS -->
+    <target name="test" depends="build" description="Runs all the tests">
+        <mkdir dir="${test.report.dir}"/>
+        <junitlauncher printsummary="true" haltonfailure="true">
+            <classpath>
+                <path refid="lib.test.path"/>
+                <pathelement location="${build}"/>
+                <pathelement location="${build.classes}"/>
+                <pathelement location="${test.dir}"/>
+            </classpath>
+
+            <testclasses outputdir="${test.report.dir}">
+                <fileset dir="${test.dir}">
+                    <include name="**/*.class"/>
+                </fileset>
+                <listener type="legacy-xml"
+                          sendSysOut="true"
+                          sendSysErr="true"/>
+                <fork/>
+            </testclasses>
+        </junitlauncher>
+    </target>
+
+    <!-- TEST AND COMMIT REPORT -->
+    <target name="report" depends="test" description="Runs tests and commits the report">
+        <junitreport todir="${test.report.dir}">
+            <fileset dir="${test.report.dir}">
+                <include name="TEST-*.xml"/>
+            </fileset>
+            <report format="frames" todir="${test.report.html.dir}"/>
+        </junitreport>
+
+        <exec executable="${git}">
+            <arg value="add"/>
+            <arg value="/home/aleksei/NetBeansProjects/web-lab-3-2/test/report"/>
+        </exec>
+
+        <exec executable="${git}">
+            <arg value="commit"/>
+            <arg value="-m"/>
+            <arg value="add test results"/>
+        </exec>
+
+    </target>
+
+    <!-- CLEANSING -->
+    <target name="clean" description="Removes all temporary files">
+        <delete dir="${build.classes}"/>
+        <delete dir="${test.dir}"/>
+    </target>
+</project>

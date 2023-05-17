@@ -1,0 +1,285 @@
+/* thats the one */
+
+@font-face {
+    font-family: "Inter";
+    src: url("fonts/Inter-Regular.otf") format("opentype");
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: "Inter";
+    src: url("fonts/Inter-ExtraLight.otf") format("opentype");
+    font-weight: 200;
+}
+
+@font-face {
+    font-family: "Inter";
+    src: url("fonts/Inter-Bold.otf") format("opentype");
+    font-weight: bold;
+}
+
+
+
+
+* {
+    margin: 0px;
+    padding: 0px;
+    max-width: 100vw;
+}
+
+body {
+    font-family: Inter;
+    font-weight: 500;
+    color: #5E5E5E;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+}
+.header-content {
+    display: flex;
+    justify-content: center;
+    height: 15vh;
+    min-height: 100px;
+    width: 100vw;
+    align-content: center;
+    flex-direction: column;
+}
+
+.header-wrapper {
+
+}
+.main-h1-wrapper {
+    margin-bottom: 2px;
+}
+
+.main-h1-wrapper > h1 {
+    font-size: 52px;
+    margin-top: 5px;
+    font-weight: 500;
+    text-align: center;
+}
+.main-h1-wrapper > h1 > span {
+    border-radius: 20px;
+    background-color: #FFBFBF;
+}
+
+.header-wrapper > hr {
+    width: 70vw;
+    margin-left: 15vw;
+}
+
+.main-h2-wrapper {
+
+}
+.main-h2-wrapper > h2 {
+    font-size: 12px;
+    font-weight: 200;
+    text-align: center;
+    padding-left: 15vw;
+    padding-right: 15vw;
+}
+
+.main-h2-wrapper > h2 > span {
+    color: #FFBFBF;
+    font-weight: bold;
+}
+
+main {
+
+}
+.main-content {
+    height: 85vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+
+/** random stuff here **/
+.r-button-pressed {
+    border: 2px solid #FFBFBF;
+    background-color: #5E5E5E;
+    border-radius: 5px;
+}
+
+.validation-result {
+    border-radius: 20px;
+    text-align: center;
+    align-self: center;
+    height: 50px;
+    width: 50px;
+    margin-left: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border: 2px solid #FFBFBF;
+}
+.valid {
+    background-color: #FFBFBF;
+}
+.invalid {
+
+}
+
+.area {
+    overflow: hidden;
+    border: none;
+    border-radius: 30px;
+}
+
+.area:hover {
+    border: none;
+    border-radius: 30px;
+}
+
+.history > div {
+    padding: 10px;
+    margin: 10px;
+    background-color: #FFBFBF;
+    border-radius: 20px;
+}
+
+.user-input {
+    display: flex;
+}
+.inputs {
+    margin: 20px;
+    min-width: 25vw;
+    border: 2px solid #ABABAB;
+    border-radius: 20px;
+    padding: 10px;
+}
+
+.inputs {
+    align-items: center;
+    display: flex;
+}
+
+.content-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 4px dashed #FFBFBF;
+    border-radius: 20px;
+    padding: 10px;
+}
+
+.controls > div {
+    margin: 5px;
+}
+
+.inputs > * {
+    padding: 5px;
+}
+
+.inputs > p {
+    padding-right: 15px;
+}
+
+.system-of-axis {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.system-of-axis > img {
+    width: 14vw;
+}
+
+.submit-button {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.history {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.request {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.history-header {
+    display: flex;
+    justify-content: center;
+}
+
+.history-header h4 {
+    padding: 10px;
+    font-weight: 200;
+}
+
+.point:hover {
+    background-color: red;
+}
+
+
+.main-content > * {
+    border-radius: 20px;
+    height: 40vh;
+    width: 90vw;
+    background-color: #F5F5F5;
+}
+
+footer {
+
+}
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    height: 40vh;
+    width: 100vw;
+    background-color: #ABABAB;
+    color: #F5F5F5;
+    font-weight: bold;
+    display: flex;
+}
+a {
+    text-decoration: none;
+    color: #FFBFBF;
+}
+a:hover {
+    color: #5E5E5E;
+}
+
+.footer-line {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+
+@media (min-width: 767px) {
+    .main-content {
+        flex-direction: row;
+    }
+    .main-content > * {
+        border-radius: 20px;
+        height: 70vh;
+        width: 40vw;
+    }
+
+    .main-h2-wrapper > h2 {
+        font-size: 16px;
+    }
+}

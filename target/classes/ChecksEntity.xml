@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings xmlns="https://jakarta.ee/xml/ns/persistence/orm"
+                 version="3.0">
+
+    <entity class="com.d23alex.lab311.ChecksEntity">
+        <table name="checks" schema="s336541" catalog="studs"/>
+        <attributes>
+            <id name="id">
+                <column name="id" precision="-1"/>
+            </id>
+            <basic name="x">
+                <column name="x" nullable="false" precision="-1"/>
+            </basic>
+            <basic name="y">
+                <column name="y" nullable="false" precision="-1"/>
+            </basic>
+            <basic name="r">
+                <column name="r" nullable="false" precision="-1"/>
+            </basic>
+            <basic name="areaContainsPoint">
+                <column name="area_contains_point" nullable="false" precision="-1"/>
+            </basic>
+            <basic name="requestDate">
+                <column name="request_date" nullable="false" precision="-1"/>
+            </basic>
+            <basic name="calculationTime">
+                <column name="calculation_time" nullable="false" precision="-1"/>
+            </basic>
+        </attributes>
+    </entity>
+</entity-mappings>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+   <title>MAIN PAGE TITLE</title>
+</h:head>
+<h:body>
+   <ui:composition template="/template/common/commonLayout.xhtml">
+
+      <ui:define name="content">
+         <h1 id="clock" style="height: 50vh ; width: 100vw; text-align: center"/>
+         <h:outputScript>
+            function clock() {
+               const date = new Date();
+               const hours = (10 > date.getHours()) ? "0" + date.getHours() : date.getHours();
+               const minutes = (10 > date.getMinutes()) ? "0" + date.getMinutes() : date.getMinutes();
+               const seconds = (10 > date.getSeconds()) ? "0" + date.getSeconds() : date.getSeconds();
+               document.getElementById("clock").innerHTML = hours + ":" + minutes + ":" + seconds;
+            }
+            setInterval(clock, 11000);
+            clock();
+         </h:outputScript>
+         <h1 style="width: 100vw; text-align: center; margin-bottom: 10px;">
+            <a href="main.xhtml">goto MAINPAGE@main.xhtml</a>
+         </h1>
+      </ui:define>
+
+   </ui:composition>
+
+</h:body>
+
+
+</html>
